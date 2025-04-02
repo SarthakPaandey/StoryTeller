@@ -70,14 +70,6 @@ yarn dev
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## Using the App
-
-1. Select your AI model (Basic or Gemini)
-2. Enter a prompt to start your adventure
-3. View the generated story with a matching image
-4. Choose from the options to continue the story
-5. Download your completed story when finished
-
 ## Features Notes
 
 - **Image Generation**: 
