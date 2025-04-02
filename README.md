@@ -84,7 +84,3 @@ yarn dev
 - User accounts to save story progress
 - Social sharing capabilities
 - Mobile app version
-
-## License
-
-This project is licensed under the ISC License 
