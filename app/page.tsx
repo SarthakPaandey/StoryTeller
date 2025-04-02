@@ -18,6 +18,9 @@ interface StoryState {
   hasStarted: boolean;
   geminiError?: string;
   currentImage?: string;
+  storyLength: 'short' | 'medium' | 'long';
+  segmentsCount: number;
+  isEnding: boolean;
 }
 
 export default function Home() {
@@ -27,7 +30,24 @@ export default function Home() {
     storyHistory: [],
     isLoading: false,
     hasStarted: false,
+    storyLength: 'medium',
+    segmentsCount: 0,
+    isEnding: false,
   });
+
+  const handleLengthChange = (length: 'short' | 'medium' | 'long') => {
+    setStoryState(prev => ({ ...prev, storyLength: length }));
+  };
+
+  const getMaxSegments = () => {
+    // Define maximum segments based on selected length
+    switch (storyState.storyLength) {
+      case 'short': return 3;
+      case 'medium': return 7;
+      case 'long': return 12;
+      default: return 7;
+    }
+  };
 
   const handleStartStory = async (prompt: string) => {
     try {
@@ -39,7 +59,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt, storyLength: storyState.storyLength }),
       });
       
       if (!response.ok) {
@@ -68,6 +88,7 @@ export default function Home() {
         storyHistory: [{ text: data.story, prompt, image: data.storyImage }],
         isLoading: false,
         hasStarted: true,
+        segmentsCount: 1,
       }));
     } catch (error) {
       console.error('Error generating story:', error);
@@ -80,6 +101,14 @@ export default function Home() {
     try {
       setStoryState(prev => ({ ...prev, isLoading: true }));
       
+      // Check if user selected the "conclude story" option
+      const isConcluding = choice.toLowerCase().includes('conclude') || 
+                          choice.toLowerCase().includes('end the story');
+      
+      // Check if we're reaching the story length limit
+      const maxSegments = getMaxSegments();
+      const isApproachingEnd = storyState.segmentsCount >= maxSegments - 1;
+      
       // Always use Gemini API for story generation
       const response = await fetch('/api/gemini-story', {
         method: 'POST',
@@ -88,7 +117,8 @@ export default function Home() {
         },
         body: JSON.stringify({ 
           prompt: choice,
-          history: storyState.storyHistory 
+          history: storyState.storyHistory,
+          concludeStory: isConcluding || isApproachingEnd,
         }),
       });
       
@@ -102,15 +132,32 @@ export default function Home() {
         ...prev,
         currentStory: data.story,
         currentImage: data.storyImage || undefined,
-        choices: data.choices,
+        choices: isConcluding || isApproachingEnd || prev.segmentsCount >= maxSegments 
+                ? [] 
+                : data.choices.concat(["Conclude this story"]),
         storyHistory: [...prev.storyHistory, { text: data.story, prompt: choice, image: data.storyImage }],
         isLoading: false,
+        segmentsCount: prev.segmentsCount + 1,
+        isEnding: isConcluding || prev.segmentsCount >= maxSegments,
       }));
     } catch (error) {
       console.error('Error continuing story:', error);
       setStoryState(prev => ({ ...prev, isLoading: false }));
       alert('Failed to continue story. Please try again.');
     }
+  };
+
+  const handleRestartStory = () => {
+    setStoryState({
+      currentStory: '',
+      choices: [],
+      storyHistory: [],
+      isLoading: false,
+      hasStarted: false,
+      storyLength: storyState.storyLength,
+      segmentsCount: 0,
+      isEnding: false,
+    });
   };
 
   const handleSaveStory = () => {
@@ -149,6 +196,36 @@ export default function Home() {
               </div>
             )}
             
+            <div className="story-length-selector mb-6">
+              <p className="mb-2 font-medium">Choose your story length:</p>
+              <div className="flex gap-3">
+                <button 
+                  className={`px-4 py-2 rounded-md transition-colors ${storyState.storyLength === 'short' 
+                    ? 'bg-primary text-white' 
+                    : 'bg-gray-200 hover:bg-gray-300'}`}
+                  onClick={() => handleLengthChange('short')}
+                >
+                  Short (3 scenes)
+                </button>
+                <button 
+                  className={`px-4 py-2 rounded-md transition-colors ${storyState.storyLength === 'medium' 
+                    ? 'bg-primary text-white' 
+                    : 'bg-gray-200 hover:bg-gray-300'}`}
+                  onClick={() => handleLengthChange('medium')}
+                >
+                  Medium (7 scenes)
+                </button>
+                <button 
+                  className={`px-4 py-2 rounded-md transition-colors ${storyState.storyLength === 'long' 
+                    ? 'bg-primary text-white' 
+                    : 'bg-gray-200 hover:bg-gray-300'}`}
+                  onClick={() => handleLengthChange('long')}
+                >
+                  Long (12 scenes)
+                </button>
+              </div>
+            </div>
+            
             <p className="start-description">
               Enter a prompt to begin your story. Be creative! Some examples:
               <span className="example-prompt">- "A dragon in a futuristic city"</span>
@@ -167,8 +244,14 @@ export default function Home() {
             choices={storyState.choices}
             onChoiceSelect={handleChoiceSelection}
             onSaveStory={handleSaveStory}
+            onRestartStory={handleRestartStory}
             isLoading={storyState.isLoading}
             storyImage={storyState.currentImage}
+            storyProgress={{
+              current: storyState.segmentsCount,
+              max: getMaxSegments(),
+              isEnding: storyState.isEnding
+            }}
           />
         )}
       </div>

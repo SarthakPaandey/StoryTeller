@@ -3,7 +3,33 @@ import { generateStoryWithGemini } from '../../utils/gemini';
 import { getImageForStory, getMockImageForStory } from '../../utils/unsplash';
 
 // Mock story generator for fallback
-const generateMockStory = (prompt: string) => {
+const generateMockStory = (prompt: string, storyLength: string = 'medium', concludeStory: boolean = false) => {
+  // If we need to conclude the story
+  if (concludeStory) {
+    const conclusionTemplates = [
+      `As your journey with ${prompt.toLowerCase()} comes to an end, you feel a sense of completion wash over you. The adventure has changed you in ways you never expected, leaving you with memories that will last a lifetime.
+
+      Looking back at all you've experienced, you can't help but smile. This chapter may be closing, but new adventures await beyond the horizon.`,
+      
+      `The story of ${prompt.toLowerCase()} finds its resolution as all the pieces fall into place. What seemed like chaos now reveals itself as a perfect pattern, a tapestry of events woven with purpose.
+
+      You take a deep breath, savoring this moment of clarity and conclusion. Some journeys end, but their impact remains forever etched in the heart.`,
+      
+      `Your adventure with ${prompt.toLowerCase()} reaches its final moments. The challenges you faced, the choices you made - all have led to this singular point of resolution and understanding.
+
+      As this tale concludes, you carry with you the wisdom gained and memories formed. Every ending is but a doorway to new beginnings.`
+    ];
+    
+    // Choose a random conclusion
+    const randomIndex = Math.floor(Math.random() * conclusionTemplates.length);
+    
+    return {
+      story: conclusionTemplates[randomIndex],
+      choices: [] // No choices for conclusion
+    };
+  }
+  
+  // Regular story generation
   const storyTemplates = [
     `As you ${prompt.toLowerCase()}, the world around you shifts and changes. The air feels different, charged with an energy you've never felt before. You find yourself standing at the edge of a great precipice, the winds howling around you carrying whispers of forgotten lands.
 
@@ -48,7 +74,7 @@ const generateMockStory = (prompt: string) => {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { prompt, history } = body;
+    const { prompt, history, concludeStory = false, storyLength = 'medium' } = body;
     
     if (!prompt) {
       return NextResponse.json(
@@ -74,13 +100,13 @@ export async function POST(request: NextRequest) {
     // Generate story with Gemini
     let storyResult;
     try {
-      storyResult = await generateStoryWithGemini(prompt, history);
+      storyResult = await generateStoryWithGemini(prompt, history, concludeStory);
     } catch (apiError) {
       console.error('Gemini API Error:', apiError);
       
       // If Gemini API fails, use the mock generator as fallback
       console.log('Using mock story generator as fallback');
-      storyResult = generateMockStory(prompt);
+      storyResult = generateMockStory(prompt, storyLength, concludeStory);
     }
     
     // Generate an image for the story

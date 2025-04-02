@@ -830,4 +830,94 @@ body {
 .button-icon {
   font-size: 1.25rem;
   margin-right: 0.5rem;
+}
+
+/* Add these styles for the progress bar */
+.progress-container {
+  margin-bottom: 1.5rem;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--primary-color);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* Story ending styles */
+.story-ending {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.ending-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+.ending-text {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  color: var(--text-secondary);
+}
+
+.ending-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Story length selector */
+.story-length-selector {
+  background-color: #f8fafc;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Conclude story button */
+.choice-button-conclude {
+  background-color: #475569;
+  color: white;
+  border-left: 4px solid #f59e0b;
+  font-style: italic;
+}
+
+.choice-button-conclude:hover {
+  background-color: #334155;
+}
+
+/* Restart button */
+.restart-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #f3f4f6;
+  color: var(--text-primary);
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.restart-button::before {
+  content: '🔄';
+  font-size: 1.25rem;
+}
+
+.restart-button:hover {
+  background-color: #e5e7eb;
+  box-shadow: var(--shadow-md);
 } 
