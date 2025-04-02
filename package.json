@@ -1,0 +1,38 @@
+{
+  "name": "storytelling",
+  "version": "1.0.0",
+  "description": "Interactive AI-powered storytelling game",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": [
+    "ai",
+    "storytelling",
+    "interactive",
+    "nextjs"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.0",
+    "next": "^15.2.4",
+    "node-fetch": "^2.7.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "unsplash-js": "^7.0.19"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.17",
+    "@types/react": "19.0.12",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-preset-env": "^10.1.5",
+    "tailwindcss": "^4.1.0",
+    "typescript": "5.8.2"
+  }
+}
