@@ -14,8 +14,8 @@ export async function generateStoryWithGemini(prompt: string, history?: Array<{ 
   // Initialize the Google Generative AI with the API key
   const genAI = new GoogleGenerativeAI(API_KEY);
   
-  // Get the model (Gemini Pro is suitable for text generation)
-  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+  // Get the model - use gemini-1.5-pro instead of gemini-pro
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   
   // Build context from history if available
   let context = '';
