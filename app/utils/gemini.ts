@@ -57,9 +57,9 @@ export async function generateStoryWithGemini(
     
     Based on this prompt: "${prompt}", 
     
-    Generate a vivid, descriptive story snippet (2-3 paragraphs) that ends at a point where the reader would need to make a choice.
+    The story ends at a point where the reader would need to make a choice.
     
-    The story should be simple to read and understand, and should be suitable for 16+ year children.
+    The story should be simple in english to read and understand, and should be suitable for 16+ year children.
     
     Also, provide 3 distinct and interesting possible continuations for the story.
     
