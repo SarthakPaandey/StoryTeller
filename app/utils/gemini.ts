@@ -35,7 +35,7 @@ export async function generateStoryWithGemini(
   if (concludeStory) {
     // Prompt for concluding the story
     fullPrompt = `${context ? context + '\n\n' : ''}
-    You are a creative storyteller crafting the conclusion to an engaging interactive story.
+    You are a creative storyteller crafting the conclusion to an engaging interactive story. You should use simple and common english words.
     
     Based on this prompt: "${prompt}" and the story history above, 
     
@@ -59,7 +59,9 @@ export async function generateStoryWithGemini(
     
     The story ends at a point where the reader would need to make a choice.
     
-    The story should be simple in english to read and understand, and should be suitable for 16+ year children.
+    You should use simple and common english words.
+    
+    The story should be simple in english to read and understand.
     
     Also, provide 3 distinct and interesting possible continuations for the story.
     
