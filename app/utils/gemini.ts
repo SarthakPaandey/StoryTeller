@@ -59,9 +59,9 @@ export async function generateStoryWithGemini(
     
     Generate a vivid, descriptive story snippet (2-3 paragraphs) that ends at a point where the reader would need to make a choice.
     
-    Make your story descriptive and engaging with sensory details and emotion.
+    The story should be simple to read and understand, and should be suitable for 16+ year children.
     
-    Also provide 3 distinct and interesting possible continuations for the story.
+    Also, provide 3 distinct and interesting possible continuations for the story.
     
     Respond in JSON format with the following structure:
     {
