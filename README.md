@@ -70,17 +70,3 @@ yarn dev
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## Features Notes
-
-- **Image Generation**: 
-  - If you provide an Unsplash API key, the app will use the official API to find high-quality, relevant images
-  - Without an API key, it will use the source.unsplash.com service as a fallback
-  - Images are selected based on keywords extracted from the story content
-
-## Future Enhancements
-
-- Integration with other AI models (OpenAI, Claude, etc.)
-- Image generation using DALL-E or Stable Diffusion for more tailored visuals
-- User accounts to save story progress
-- Social sharing capabilities
-- Mobile app version
